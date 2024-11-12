@@ -4,6 +4,10 @@ package ru.practicum.shareit.user.dto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+/**
+ * DTO, получаемое при создании User
+ */
+
 @Data
 public class UserCreateDto {
 
