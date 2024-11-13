@@ -12,9 +12,9 @@ public interface UserRepository {
 
     User getUserById(Long userId);
 
-    User createUser(User userCreateDto);
+    User createUser(User user);
 
-    User userUpdate(User userUpdateDto);
+    User userUpdate(User user);
 
     void deleteUser(Long userId);
 

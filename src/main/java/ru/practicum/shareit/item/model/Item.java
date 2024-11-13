@@ -8,8 +8,8 @@ import lombok.EqualsAndHashCode;
 //@Builder
 public class Item {
 
-    private Long ownerId;
     private Long id;
+    private Long ownerId;
     private String name;
     private String description;
     private Boolean availableStatus;

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
-import ru.practicum.shareit.user.dto.markerInterfaces.Update;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
@@ -36,10 +35,11 @@ public class UserController {
         return userService.createUser(userCreateDto);
     }
 
-    @PutMapping
-    @Validated(Update.class)
-    public UserDto userUpdate(@Valid @RequestBody UserUpdateDto userUpdateDto) {
-        return userService.userUpdate(userUpdateDto);
+    @PutMapping("/id")
+//    @Validated(Update.class)
+    public UserDto userUpdate(@PathVariable("id") Long id,
+                              @Valid @RequestBody UserUpdateDto userUpdateDto) {
+        return userService.userUpdate(id, userUpdateDto);
     }
 
     @DeleteMapping("/id")

@@ -5,20 +5,16 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import ru.practicum.shareit.user.dto.markerInterfaces.Update;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @Builder
 @AllArgsConstructor
-public class ItemDto {
+public class ItemUpdateDto {
 
     private Long ownerId;
 
-    @NotNull(groups = {Update.class})
-    @Positive(groups = {Update.class})
+    @NotNull
+    @Positive
     private Long id;
 
     private String name;
