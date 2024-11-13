@@ -35,7 +35,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto getAvailableItem(String text) {
+    public Collection<ItemDto> getAvailableItems(String text) {
         return null;
     }
 }

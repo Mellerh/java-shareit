@@ -42,12 +42,19 @@ public class ItemController {
         return itemService.addNewItem(userId, itemCreateDto);
     }
 
-    @PutMapping("{/itemId}")
+    @PatchMapping("{/itemId}")
     public ItemDto updateItem(@RequestHeader(USER_ID) Long userId,
                               @PathVariable Long itemId,
                               @Valid @RequestBody ItemUpdateDto itemUpdateDto) {
         return itemService.updateItem(userId, itemId, itemUpdateDto);
     }
 
-    /// TODO дописать метод поиска по тексту getAvailableItem
+    /**
+     * поиск вещи потенциальным арендатором
+     */
+    @GetMapping("/search")
+    public Collection<ItemDto> getAvailableItems(@RequestParam(required = false) String text) {
+        return itemService.getAvailableItems(text);
+    }
+
 }
