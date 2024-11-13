@@ -13,7 +13,8 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-
+    /// TODO как один из вариантов связи вещей с пользователем - это связанная хеш-таблица - Map<UserId, List<Item>>.
+    /// но это как один из вариантов
     @Override
     public ItemDto getItemById(Long itemId) {
         return null;

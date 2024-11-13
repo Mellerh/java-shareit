@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import ru.practicum.shareit.user.dto.markerInterfaces.Update;
+import ru.practicum.shareit.user.model.User;
 
 /**
  * TODO Sprint add-controllers.
@@ -15,7 +16,7 @@ import ru.practicum.shareit.user.dto.markerInterfaces.Update;
 @AllArgsConstructor
 public class ItemDto {
 
-    private Long ownerId;
+    private User owner;
 
     @NotNull(groups = {Update.class})
     @Positive(groups = {Update.class})

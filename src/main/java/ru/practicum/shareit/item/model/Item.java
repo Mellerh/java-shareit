@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.user.model.User;
 
 @Data
 @EqualsAndHashCode(of = "id")
@@ -10,7 +11,7 @@ import lombok.EqualsAndHashCode;
 public class Item {
 
     private Long id;
-    private Long ownerId;
+    private User owner;
     private String name;
     private String description;
     private Boolean availableStatus;

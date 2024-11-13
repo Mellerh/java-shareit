@@ -2,13 +2,15 @@ package ru.practicum.shareit.item.dto;
 
 import org.springframework.stereotype.Component;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 @Component
 public class ItemMapper {
 
-    public Item toItemModel(ItemDto itemDto) {
+    public Item toItemModel(ItemDto itemDto, User owner) {
         return Item.builder()
                 .id(itemDto.getId())
+                .owner(owner)
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
                 .availableStatus(itemDto.getAvailableStatus())
@@ -16,9 +18,9 @@ public class ItemMapper {
                 .build();
     }
 
-    public Item toItemModel(ItemCreateDto itemCreateDto, Long ownerId) {
+    public Item toItemModel(ItemCreateDto itemCreateDto, User owner) {
         return Item.builder()
-                .ownerId(ownerId)
+                .owner(owner)
                 .name(itemCreateDto.getName())
                 .description(itemCreateDto.getDescription())
                 .availableStatus(itemCreateDto.getAvailableStatus())
@@ -27,22 +29,12 @@ public class ItemMapper {
     }
 
 //    public Item toItemModel(ItemUpdateDto itemUpdateDto) {
-//        private Long ownerId;
-//
-//        @NotNull
-//        @Positive
-//        private Long id;
-//
-//        private String name;
-//        private String description;
-//        private Boolean availableStatus;
-//        private String request;
 //    }
 
-    public ItemDto toItemDto(Item item) {
+    public ItemDto toItemDto(Item item, User owner) {
         return ItemDto.builder()
-                .ownerId(item.getOwnerId())
                 .id(item.getId())
+                .owner(owner)
                 .name(item.getName())
                 .description(item.getDescription())
                 .availableStatus(item.getAvailableStatus())

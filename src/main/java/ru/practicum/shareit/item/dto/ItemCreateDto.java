@@ -4,13 +4,14 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import ru.practicum.shareit.user.model.User;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class ItemCreateDto {
 
-    private Long ownerId;
+    private User owner;
 
     @NotBlank
     private String name;

@@ -5,13 +5,14 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import ru.practicum.shareit.user.model.User;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class ItemUpdateDto {
 
-    private Long ownerId;
+    private User owner;
 
     @NotNull
     @Positive
