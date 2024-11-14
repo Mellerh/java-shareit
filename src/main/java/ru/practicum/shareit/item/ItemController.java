@@ -26,9 +26,10 @@ public class ItemController {
     private final ItemService itemService;
 
 
-    @GetMapping("{/itemId}")
-    public ItemDto getItemById(@PathVariable Long itemId) {
-        return itemService.getItemById(itemId);
+    @GetMapping("/{itemId}")
+    public ItemDto getItemById(@RequestHeader(USER_ID) Long userId,
+                               @PathVariable Long itemId) {
+        return itemService.getItemById(userId, itemId);
     }
 
     @GetMapping
@@ -42,7 +43,7 @@ public class ItemController {
         return itemService.addNewItem(userId, itemCreateDto);
     }
 
-    @PatchMapping("{/itemId}")
+    @PatchMapping("/{itemId}")
     public ItemDto updateItem(@RequestHeader(USER_ID) Long userId,
                               @PathVariable Long itemId,
                               @Valid @RequestBody ItemUpdateDto itemUpdateDto) {
@@ -53,7 +54,8 @@ public class ItemController {
      * поиск вещи потенциальным арендатором
      */
     @GetMapping("/search")
-    public Collection<ItemDto> getAvailableItems(@RequestParam(required = false) String text) {
+    public Collection<ItemDto> getAvailableItems(@RequestHeader(USER_ID) Long userId,
+                                                 @RequestParam(required = false) String text) {
         return itemService.getAvailableItems(text);
     }
 

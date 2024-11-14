@@ -2,10 +2,13 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.dto.ItemCreateDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemShortDto;
-import ru.practicum.shareit.item.dto.ItemUpdateDto;
+import ru.practicum.shareit.exception.exceptions.DataConflictException;
+import ru.practicum.shareit.exception.exceptions.NotFoundException;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Collection;
 
@@ -13,30 +16,87 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
 
-    /// TODO как один из вариантов связи вещей с пользователем - это связанная хеш-таблица - Map<UserId, List<Item>>.
-    /// но это как один из вариантов
+
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final ItemMapper itemMapper;
+
     @Override
-    public ItemDto getItemById(Long itemId) {
-        return null;
+    public ItemDto getItemById(Long userId, Long itemId) {
+        User user = isUserExist(userId);
+        Item item = isItemExist(itemId);
+
+        if (user.getId() != item.getOwner().getId()) {
+            throw new DataConflictException("Item с id " + itemId + " не принадлежит User с id " + userId);
+        }
+
+        return itemMapper.toItemDto(item, user);
     }
 
     @Override
     public Collection<ItemShortDto> getAllUserItems(Long userId) {
-        return null;
+        User user = isUserExist(userId);
+
+        return itemRepository.getAllUserItems(userId).stream()
+                .map(item -> itemMapper.toShortDto(item))
+                .toList();
     }
 
     @Override
-    public ItemDto addNewItem(Long userId, ItemCreateDto item) {
-        return null;
+    public ItemDto addNewItem(Long userId, ItemCreateDto itemDto) {
+        User user = isUserExist(userId);
+        Item item = itemMapper.toItemModel(itemDto, user);
+
+        Item itemWithId = itemRepository.addNewItem(userId, item);
+
+        return itemMapper.toItemDto(itemWithId, user);
     }
 
     @Override
-    public ItemDto updateItem(Long userId, Long itemId, ItemUpdateDto item) {
-        return null;
+    public ItemDto updateItem(Long userId, Long itemId, ItemUpdateDto itemUpdate) {
+        User user = isUserExist(userId);
+        Item item = isItemExist(itemId);
+
+        if (user.getId() != item.getOwner().getId()) {
+            throw new DataConflictException("Item с id " + itemId + " не принадлежит User с id " + userId);
+        }
+
+        if (itemUpdate.getName() != null) {
+            item.setName(itemUpdate.getName());
+        }
+
+        if (itemUpdate.getDescription() != null) {
+            item.setDescription(itemUpdate.getDescription());
+        }
+
+        if (itemUpdate.getAvailable() != null) {
+            item.setAvailable(itemUpdate.getAvailable());
+        }
+
+        return itemMapper.toItemDto(itemRepository.updateItem(userId, itemId, item), user);
+
     }
 
     @Override
     public Collection<ItemDto> getAvailableItems(String text) {
         return null;
     }
+
+
+    private User isUserExist(Long userId) {
+        User user = userRepository.getUserById(userId);
+        if (user == null) {
+            throw new NotFoundException("User с id " + userId + " не найден.");
+        }
+        return user;
+    }
+
+    private Item isItemExist(Long itemId) {
+        Item item = itemRepository.getItemById(itemId);
+        if (item == null) {
+            throw new NotFoundException("Item с id " + itemId + " не найдена.");
+        }
+        return item;
+    }
+
 }

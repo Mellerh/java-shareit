@@ -11,7 +11,7 @@ import java.util.Collection;
 @Service
 public interface ItemService {
 
-    ItemDto getItemById(Long itemId);
+    ItemDto getItemById(Long userId, Long itemId);
 
     Collection<ItemShortDto> getAllUserItems(Long userId);
 

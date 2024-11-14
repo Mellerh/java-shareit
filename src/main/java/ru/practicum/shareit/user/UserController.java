@@ -35,14 +35,14 @@ public class UserController {
         return userService.createUser(userCreateDto);
     }
 
-    @PatchMapping("/id")
+    @PatchMapping("/{id}")
 //    @Validated(Update.class)
     public UserDto userUpdate(@PathVariable("id") Long id,
                               @Valid @RequestBody UserUpdateDto userUpdateDto) {
         return userService.userUpdate(id, userUpdateDto);
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable("id") Long id) {
         userService.deleteUser(id);
     }

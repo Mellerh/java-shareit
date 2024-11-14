@@ -24,7 +24,7 @@ public class ItemDto {
 
     private String name;
     private String description;
-    private Boolean availableStatus;
+    private Boolean available;
     private String request;
 
 }

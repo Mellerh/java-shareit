@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,12 +14,13 @@ public class ItemCreateDto {
 
     private User owner;
 
-    @NotBlank
+    @NotBlank(message = "name должно быть заполнено")
     private String name;
-    @NotBlank
+    @NotBlank(message = "description дожно быть заполнено")
     private String description;
 
-    private Boolean availableStatus;
+    @NotNull(message = "available должно быть заполнено")
+    private Boolean available;
     private String request;
 
 }

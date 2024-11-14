@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.exception.exceptions.DataConflictException;
+import ru.practicum.shareit.exception.exceptions.DuplicatedDataException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.Map;
 @Repository
 public class InMemoryUserRepository implements UserRepository {
 
-    private Long userId = 0L;
+    private Long userIdCounter = 0L;
     private final Map<Long, User> userMap = new HashMap<>();
 
     @Override
@@ -29,9 +29,9 @@ public class InMemoryUserRepository implements UserRepository {
         // если email нового пользователя уже занят, выбросим исключение
         isUserEmailEngaged(user);
 
-        ++userId;
-        user.setId(userId);
-        userMap.put(userId, user);
+        ++userIdCounter;
+        user.setId(userIdCounter);
+        userMap.put(userIdCounter, user);
 
         return user;
     }
@@ -61,7 +61,7 @@ public class InMemoryUserRepository implements UserRepository {
             }
 
             if (user.getEmail().equals(userFromMap.getEmail())) {
-                throw new DataConflictException("Email уже используется.");
+                throw new DuplicatedDataException("Email уже используется.");
             }
         }
 
