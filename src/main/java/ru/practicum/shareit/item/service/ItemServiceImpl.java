@@ -11,6 +11,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class ItemServiceImpl implements ItemService {
         User user = isUserExist(userId);
         Item item = isItemExist(itemId);
 
-        if (user.getId() != item.getOwner().getId()) {
+        if (!Objects.equals(user.getId(), item.getOwner().getId())) {
             throw new DataConflictException("Item с id " + itemId + " не принадлежит User с id " + userId);
         }
 
@@ -57,7 +58,7 @@ public class ItemServiceImpl implements ItemService {
         User user = isUserExist(userId);
         Item item = isItemExist(itemId);
 
-        if (user.getId() != item.getOwner().getId()) {
+        if (!Objects.equals(user.getId(), item.getOwner().getId())) {
             throw new DataConflictException("Item с id " + itemId + " не принадлежит User с id " + userId);
         }
 

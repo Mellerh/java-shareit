@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // обновляем email. проверяем не используется ли email у других User
-        if (userUpdateDto.getEmail() != null && userUpdateDto.getEmail() != user.getEmail()) {
+        if (userUpdateDto.getEmail() != null && !userUpdateDto.getEmail().equals(user.getEmail())) {
             user.setEmail(userUpdateDto.getEmail());
         }
 
