@@ -26,7 +26,7 @@ public class ItemServiceImpl implements ItemService {
         User user = isUserExist(userId);
         Item item = isItemExist(itemId);
 
-        if (user.getId() != item.getOwner().getId()) {
+        if (user.getId().equals(item.getOwner().getId())) {
             throw new DataConflictException("Item с id " + itemId + " не принадлежит User с id " + userId);
         }
 
@@ -57,7 +57,7 @@ public class ItemServiceImpl implements ItemService {
         User user = isUserExist(userId);
         Item item = isItemExist(itemId);
 
-        if (user.getId() != item.getOwner().getId()) {
+        if (user.getId().equals(item.getOwner().getId())) {
             throw new DataConflictException("Item с id " + itemId + " не принадлежит User с id " + userId);
         }
 
