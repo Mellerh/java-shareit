@@ -23,29 +23,29 @@ import java.util.Collection;
 public class ItemController {
 
     // X-Sharer-User-Id - это заголовок, из которого мы получаем userId
-    private final String USER_ID = "X-Sharer-User-Id";
+    private final String userIdFromHeader = "X-Sharer-User-Id";
     private final ItemService itemService;
 
 
     @GetMapping("/{itemId}")
-    public ItemDto getItemById(@RequestHeader(USER_ID) Long userId,
+    public ItemDto getItemById(@RequestHeader(userIdFromHeader) Long userId,
                                @PathVariable Long itemId) {
         return itemService.getItemById(userId, itemId);
     }
 
     @GetMapping
-    public Collection<ItemShortDto> getAllUserItems(@RequestHeader(USER_ID) Long userId) {
+    public Collection<ItemShortDto> getAllUserItems(@RequestHeader(userIdFromHeader) Long userId) {
         return itemService.getAllUserItems(userId);
     }
 
     @PostMapping
-    public ItemDto addNewItem(@RequestHeader(USER_ID) Long userId,
+    public ItemDto addNewItem(@RequestHeader(userIdFromHeader) Long userId,
                               @Valid @RequestBody ItemCreateDto itemCreateDto) {
         return itemService.addNewItem(userId, itemCreateDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader(USER_ID) Long userId,
+    public ItemDto updateItem(@RequestHeader(userIdFromHeader) Long userId,
                               @PathVariable Long itemId,
                               @Valid @RequestBody ItemUpdateDto itemUpdateDto) {
         return itemService.updateItem(userId, itemId, itemUpdateDto);
@@ -55,7 +55,7 @@ public class ItemController {
      * поиск вещи потенциальным арендатором
      */
     @GetMapping("/search")
-    public Collection<ItemDto> getAvailableItemsByText(@RequestHeader(USER_ID) Long userId,
+    public Collection<ItemDto> getAvailableItemsByText(@RequestHeader(userIdFromHeader) Long userId,
                                                  @RequestParam(required = false) String text) {
         if (text.isEmpty()) {
             return new ArrayList<>();
