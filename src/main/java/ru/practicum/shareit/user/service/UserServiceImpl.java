@@ -2,7 +2,6 @@ package ru.practicum.shareit.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.exception.exceptions.DataConflictException;
 import ru.practicum.shareit.exception.exceptions.DuplicatedDataException;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
 import ru.practicum.shareit.user.dto.UserCreateDto;
@@ -41,13 +40,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserCreateDto userCreateDto) {
 
+
         User user = userMapper.toUserModel(userCreateDto);
 
-        try {
-            return userMapper.toUserDto(userRepository.createUser(user));
-        } catch (DataConflictException e) {
+        // провярем, занят ли email
+        if (userRepository.isUserEmailEngaged(user.getId(), user.getEmail())) {
             throw new DuplicatedDataException("Пользователь с email " + userCreateDto.getEmail() + " уже существует.");
         }
+
+        return userMapper.toUserDto(userRepository.createUser(user));
 
     }
 
@@ -63,16 +64,19 @@ public class UserServiceImpl implements UserService {
             user.setName(userUpdateDto.getName());
         }
 
-        // обновляем email. проверяем не используется ли email у других User
-        if (userUpdateDto.getEmail() != null && !userUpdateDto.getEmail().equals(user.getEmail())) {
+
+        // обновляем email
+        if (userUpdateDto.getEmail() != null) {
+
+            // проверяем не используется ли email у других User
+            if (userRepository.isUserEmailEngaged(user.getId(), userUpdateDto.getEmail())) {
+                throw new DuplicatedDataException("Пользователь с email " + userUpdateDto.getEmail() + " уже существует.");
+            }
+
             user.setEmail(userUpdateDto.getEmail());
         }
 
-        try {
-            return userMapper.toUserDto(userRepository.userUpdate(user));
-        } catch (DataConflictException e) {
-            throw new DuplicatedDataException("Пользователь с email " + userUpdateDto.getEmail() + " уже существует.");
-        }
+        return userMapper.toUserDto(userRepository.userUpdate(user));
 
     }
 

@@ -10,7 +10,6 @@ import ru.practicum.shareit.item.dto.ItemShortDto;
 import ru.practicum.shareit.item.dto.ItemUpdateDto;
 import ru.practicum.shareit.item.service.ItemService;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -57,9 +56,6 @@ public class ItemController {
     @GetMapping("/search")
     public Collection<ItemDto> getAvailableItemsByText(@RequestHeader(userIdFromHeader) Long userId,
                                                  @RequestParam(required = false) String text) {
-        if (text.isEmpty()) {
-            return new ArrayList<>();
-        }
 
         return itemService.getAvailableItemsByText(text);
     }

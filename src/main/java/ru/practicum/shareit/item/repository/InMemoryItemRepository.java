@@ -64,6 +64,7 @@ public class InMemoryItemRepository implements ItemRepository {
         String loweredText = text.toLowerCase();
 
         return itemMap.values().stream()
+                .filter(item -> item.getAvailable() != null)
                 .filter(item -> item.getAvailable())
                 .filter(item -> item.getName().toLowerCase().contains(loweredText)
                         || item.getDescription().toLowerCase().contains(loweredText))

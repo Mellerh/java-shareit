@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.exception.exceptions.DuplicatedDataException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.Collection;
@@ -26,9 +25,6 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User createUser(User user) {
-        // если email нового пользователя уже занят, выбросим исключение
-        isUserEmailEngaged(user);
-
         ++userIdCounter;
         user.setId(userIdCounter);
         userMap.put(userIdCounter, user);
@@ -38,7 +34,6 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public User userUpdate(User user) {
-        isUserEmailEngaged(user);
         // поскольку данные у нас сейчас хранятся в памяти, то перезаписывать User с помощью
         // userMap.put(userId, user) не нужно. Достаточно обновление полей UserService.userUpdate(), тк там мы получаем
         // User с помощью getById()
@@ -50,20 +45,27 @@ public class InMemoryUserRepository implements UserRepository {
         userMap.remove(userId);
     }
 
+
     /**
      * провярем, занят ли email
+     * если true - email занят
      */
-    private void isUserEmailEngaged(User user) {
+    public boolean isUserEmailEngaged(Long userId, String email) {
+        boolean isEmailEngaged = false;
+
         for (User userFromMap : userMap.values()) {
 
-            if (user.getId() != null && user.getId().equals(userFromMap.getId())) {
+            if (userId != null && userId.equals(userFromMap.getId())) {
                 continue;
             }
 
-            if (user.getEmail().equals(userFromMap.getEmail())) {
-                throw new DuplicatedDataException("Email уже используется.");
+            if (email.equals(userFromMap.getEmail())) {
+                isEmailEngaged = true;
+                break;
             }
         }
+
+        return isEmailEngaged;
 
     }
 

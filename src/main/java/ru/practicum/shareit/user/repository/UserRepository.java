@@ -18,4 +18,6 @@ public interface UserRepository {
 
     void deleteUser(Long userId);
 
+    boolean isUserEmailEngaged(Long userId, String email);
+
 }
