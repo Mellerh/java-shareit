@@ -20,7 +20,7 @@ public class ItemCreateDto {
     private String description;
 
     @NotNull(message = "available должно быть заполнено")
-    private Boolean available;
+    private Boolean is_available;
     private String request;
 
 }
