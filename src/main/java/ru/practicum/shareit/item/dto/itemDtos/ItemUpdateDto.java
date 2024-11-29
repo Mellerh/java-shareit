@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.dto.itemDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,6 @@ public class ItemUpdateDto {
 
     private String name;
     private String description;
-    private Boolean is_available;
+    private Boolean available;
 
 }

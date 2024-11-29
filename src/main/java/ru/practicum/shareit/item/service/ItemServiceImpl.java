@@ -3,7 +3,7 @@ package ru.practicum.shareit.item.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
-import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.dto.itemDtos.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
@@ -92,8 +92,8 @@ public class ItemServiceImpl implements ItemService {
             item.setDescription(itemUpdate.getDescription());
         }
 
-        if (itemUpdate.getIs_available() != null) {
-            item.setIs_available(itemUpdate.getIs_available());
+        if (itemUpdate.getAvailable() != null) {
+            item.setAvailable(itemUpdate.getAvailable());
         }
 
         return itemMapper.toItemDto(itemRepository.updateItem(userId, itemId, item), user);

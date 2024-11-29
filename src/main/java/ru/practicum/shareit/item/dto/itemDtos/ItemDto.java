@@ -1,4 +1,4 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.dto.itemDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +18,7 @@ public class ItemDto {
 
     private String name;
     private String description;
-    private Boolean is_available;
-    private String request;
+    private Boolean available;
+    private Long request;
 
 }

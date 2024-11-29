@@ -1,10 +1,10 @@
 package ru.practicum.shareit.item.service;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.dto.ItemCreateDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemShortDto;
-import ru.practicum.shareit.item.dto.ItemUpdateDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemCreateDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemShortDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemUpdateDto;
 
 import java.util.Collection;
 

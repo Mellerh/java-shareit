@@ -8,15 +8,16 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS item_requests (
     item_request_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description varchar,
-    requestor_id INT REFERENCES users (user_id) ON DELETE CASCADE
+    requestor_id INT REFERENCES users (user_id) ON DELETE CASCADE,
+    creation_date TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS items (
   item_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  owner_id INT NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
   name VARCHAR NOT NULL,
   description VARCHAR,
   is_available BOOL,
-  owner_id INT NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
   request_id INT REFERENCES item_requests (item_request_id) ON DELETE CASCADE
 );
 
