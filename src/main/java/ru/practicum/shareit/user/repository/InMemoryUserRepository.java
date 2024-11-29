@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.repository;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.model.User;
 
@@ -8,13 +9,22 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Repository
+@RequiredArgsConstructor
 public class InMemoryUserRepository implements UserRepository {
 
+    //    private final JdbcTemplate jdbcTemplate;
     private Long userIdCounter = 0L;
     private final Map<Long, User> userMap = new HashMap<>();
 
     @Override
     public Collection<User> getAllUsers() {
+//        String sql = "SELECT * FROM users";
+//        return jdbcTemplate.query(sql, (rs, rowNum) ->
+//                User.builder()
+//                        .id(rs.getLong("user_id"))
+//                        .name(rs.getString("name"))
+//                        .email(rs.getString("email"))
+//                        .build());
         return userMap.values();
     }
 
