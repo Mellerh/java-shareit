@@ -32,14 +32,12 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id")
     private Item bookingItem;
-    private User booker;
 
-    enum BookingStatus {
-        WAITING,
-        APPROVED,
-        REJECTED,
-        CANCELED
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booker_id")
+    private User booker;
 
 }
