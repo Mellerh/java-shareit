@@ -7,7 +7,7 @@ import ru.practicum.shareit.user.model.User;
 @Component
 public class ItemMapper {
 
-    public Item toItemModel(ItemDto itemDto, User owner) {
+    public static Item toItemModel(ItemDto itemDto, User owner) {
         return Item.builder()
                 .id(itemDto.getId())
                 .owner(owner)
@@ -17,7 +17,7 @@ public class ItemMapper {
                 .build();
     }
 
-    public Item toItemModel(ItemCreateDto itemCreateDto, User owner) {
+    public static Item toItemModel(ItemCreateDto itemCreateDto, User owner) {
         return Item.builder()
                 .owner(owner)
                 .name(itemCreateDto.getName())
@@ -30,7 +30,7 @@ public class ItemMapper {
 //    public Item toItemModel(ItemUpdateDto itemUpdateDto) {
 //    }
 
-    public ItemDto toItemDto(Item item, User owner) {
+    public static ItemDto toItemDto(Item item, User owner) {
         return ItemDto.builder()
                 .id(item.getId())
                 .owner(owner)
@@ -41,10 +41,11 @@ public class ItemMapper {
                 .build();
     }
 
-    public ItemShortDto toShortDto(Item item) {
+    public static ItemShortDto toShortItemDto(Item item) {
         return ItemShortDto.builder()
                 .name(item.getName())
                 .description(item.getDescription())
+                .available(item.getAvailable())
                 .build();
     }
 

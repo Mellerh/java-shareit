@@ -38,7 +38,7 @@ public class ItemServiceImpl implements ItemService {
             throw new NotFoundException("Item с id " + itemId + " не принадлежит User с id " + userId);
         }
 
-        return itemMapper.toItemDto(item, user);
+        return ItemMapper.toItemDto(item, user);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return itemRepository.getAllUserItems(userId).stream()
-                .map(item -> itemMapper.toShortDto(item))
+                .map(item -> ItemMapper.toShortItemDto(item))
                 .toList();
     }
 
@@ -61,11 +61,11 @@ public class ItemServiceImpl implements ItemService {
         }
 
 
-        Item item = itemMapper.toItemModel(itemDto, user);
+        Item item = ItemMapper.toItemModel(itemDto, user);
 
         Item itemWithId = itemRepository.addNewItem(userId, item);
 
-        return itemMapper.toItemDto(itemWithId, user);
+        return ItemMapper.toItemDto(itemWithId, user);
     }
 
     @Override
@@ -96,7 +96,7 @@ public class ItemServiceImpl implements ItemService {
             item.setAvailable(itemUpdate.getAvailable());
         }
 
-        return itemMapper.toItemDto(itemRepository.updateItem(userId, itemId, item), user);
+        return ItemMapper.toItemDto(itemRepository.updateItem(userId, itemId, item), user);
 
     }
 
@@ -108,7 +108,7 @@ public class ItemServiceImpl implements ItemService {
         }
 
         return itemRepository.getAvailableItemsByText(text).stream()
-                .map(item -> itemMapper.toItemDto(item, item.getOwner()))
+                .map(item -> ItemMapper.toItemDto(item, item.getOwner()))
                 .toList();
 
     }

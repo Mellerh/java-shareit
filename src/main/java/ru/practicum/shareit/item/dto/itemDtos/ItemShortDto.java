@@ -12,5 +12,6 @@ public class ItemShortDto {
 
     private String name;
     private String description;
+    private Boolean available;
 
 }
