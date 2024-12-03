@@ -38,13 +38,13 @@ public class ItemController {
     }
 
     @PostMapping
-    public ItemDto addNewItem(@RequestHeader(userIdFromHeader) Long userId,
+    public ItemShortDto addNewItem(@RequestHeader(userIdFromHeader) Long userId,
                               @Valid @RequestBody ItemCreateDto itemCreateDto) {
         return itemService.addNewItem(userId, itemCreateDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemDto updateItem(@RequestHeader(userIdFromHeader) Long userId,
+    public ItemShortDto updateItem(@RequestHeader(userIdFromHeader) Long userId,
                               @PathVariable Long itemId,
                               @Valid @RequestBody ItemUpdateDto itemUpdateDto) {
         return itemService.updateItem(userId, itemId, itemUpdateDto);

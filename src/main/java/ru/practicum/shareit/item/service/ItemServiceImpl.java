@@ -20,19 +20,15 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final ItemMapper itemMapper;
 
     @Override
     public ItemDto getItemById(Long userId, Long itemId) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("User с id " + userId + " не найден.");
-        }
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("User с id " + userId + " не найден."));
 
-        Item item = itemRepository.getItemById(itemId);
-        if (item == null) {
-            throw new NotFoundException("Item с id " + itemId + " не найдена.");
-        }
+        Item item = itemRepository.findById(itemId).orElseThrow(()
+                -> new NotFoundException("Item с id " + itemId + " не найден."));
+
 
         if (!Objects.equals(user.getId(), item.getOwner().getId())) {
             throw new NotFoundException("Item с id " + itemId + " не принадлежит User с id " + userId);
@@ -43,42 +39,33 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemShortDto> getAllUserItems(Long userId) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("User с id " + userId + " не найден.");
-        }
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("User с id " + userId + " не найден."));
 
-        return itemRepository.getAllUserItems(userId).stream()
+        return itemRepository.findAllByOwnerId(user.getId()).stream()
                 .map(item -> ItemMapper.toShortItemDto(item))
                 .toList();
     }
 
     @Override
-    public ItemDto addNewItem(Long userId, ItemCreateDto itemDto) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("User с id " + userId + " не найден.");
-        }
-
+    public ItemShortDto addNewItem(Long userId, ItemCreateDto itemDto) {
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("User с id " + userId + " не найден."));
 
         Item item = ItemMapper.toItemModel(itemDto, user);
 
-        Item itemWithId = itemRepository.addNewItem(userId, item);
-
-        return ItemMapper.toItemDto(itemWithId, user);
+        return ItemMapper.toShortItemDto(itemRepository.save(item));
     }
 
     @Override
-    public ItemDto updateItem(Long userId, Long itemId, ItemUpdateDto itemUpdate) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("User с id " + userId + " не найден.");
-        }
+    public ItemShortDto updateItem(Long userId, Long itemId, ItemUpdateDto itemUpdate) {
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("User с id " + userId + " не найден."));
 
-        Item item = itemRepository.getItemById(itemId);
-        if (item == null) {
-            throw new NotFoundException("Item с id " + itemId + " не найдена.");
-        }
+        // возможно, тут надо получать id из itemUpdateDto
+        Item item = itemRepository.findById(itemId).orElseThrow(()
+                -> new NotFoundException("Item с id " + itemId + " не найдена."));
+
 
         if (!Objects.equals(user.getId(), item.getOwner().getId())) {
             throw new NotFoundException("Item с id " + itemId + " не принадлежит User с id " + userId);
@@ -96,7 +83,9 @@ public class ItemServiceImpl implements ItemService {
             item.setAvailable(itemUpdate.getAvailable());
         }
 
-        return ItemMapper.toItemDto(itemRepository.updateItem(userId, itemId, item), user);
+        item.setOwner(user);
+
+        return ItemMapper.toShortItemDto(itemRepository.save(item));
 
     }
 
@@ -107,27 +96,10 @@ public class ItemServiceImpl implements ItemService {
             return new ArrayList<>();
         }
 
-        return itemRepository.getAvailableItemsByText(text).stream()
+        return itemRepository.searchByText(text).stream()
                 .map(item -> ItemMapper.toItemDto(item, item.getOwner()))
                 .toList();
-
     }
 
-
-    private User findUserOrThrowExp(Long userId) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("User с id " + userId + " не найден.");
-        }
-        return user;
-    }
-
-    private Item findItemOrThrowExp(Long itemId) {
-        Item item = itemRepository.getItemById(itemId);
-        if (item == null) {
-            throw new NotFoundException("Item с id " + itemId + " не найдена.");
-        }
-        return item;
-    }
 
 }

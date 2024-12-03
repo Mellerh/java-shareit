@@ -15,9 +15,9 @@ public interface ItemService {
 
     Collection<ItemShortDto> getAllUserItems(Long userId);
 
-    ItemDto addNewItem(Long userId, ItemCreateDto item);
+    ItemShortDto addNewItem(Long userId, ItemCreateDto item);
 
-    ItemDto updateItem(Long userId, Long itemId, ItemUpdateDto item);
+    ItemShortDto updateItem(Long userId, Long itemId, ItemUpdateDto item);
 
     Collection<ItemDto> getAvailableItemsByText(String text);
 

@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS items (
   owner_id INT NOT NULL REFERENCES users (user_id) ON DELETE CASCADE,
   name VARCHAR NOT NULL,
   description VARCHAR,
-  is_available BOOL,
+  available BOOL,
   request_id INT REFERENCES item_requests (item_request_id) ON DELETE CASCADE
 );
 
