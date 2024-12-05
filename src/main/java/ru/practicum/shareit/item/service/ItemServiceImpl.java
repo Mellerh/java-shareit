@@ -91,7 +91,6 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Collection<ItemDto> getAvailableItemsByText(String text) {
-        // поскольку в sql есть оператор Like, то передадим всю логику поиска в itemRepository
         if (text.isEmpty()) {
             return new ArrayList<>();
         }

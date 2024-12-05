@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.exceptions.AccessDeniedException;
 import ru.practicum.shareit.exception.exceptions.DataConflictException;
 import ru.practicum.shareit.exception.exceptions.DuplicatedDataException;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
@@ -45,5 +46,14 @@ public class ErrorHandler {
         log.info("DataConflictException", e);
         return new ErrorResponse("DataConflictException", e.getMessage());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccessDeniedException(final AccessDeniedException e) {
+        log.info("AccessDeniedException", e);
+        return new ErrorResponse("AccessDeniedException", e.getMessage());
+    }
+
+
 
 }
