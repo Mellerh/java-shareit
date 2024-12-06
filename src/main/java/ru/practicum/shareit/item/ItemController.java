@@ -25,17 +25,18 @@ public class ItemController {
     private final String userIdFromHeader = "X-Sharer-User-Id";
     private final ItemService itemService;
 
+    @GetMapping
+    public Collection<ItemShortDto> getAllUserItems(@RequestHeader(userIdFromHeader) Long userId) {
+        return itemService.getAllUserItems(userId);
+    }
+
 
     @GetMapping("/{itemId}")
     public ItemDto getItemById(@RequestHeader(userIdFromHeader) Long userId,
                                @PathVariable Long itemId) {
         return itemService.getItemById(userId, itemId);
     }
-
-    @GetMapping
-    public Collection<ItemShortDto> getAllUserItems(@RequestHeader(userIdFromHeader) Long userId) {
-        return itemService.getAllUserItems(userId);
-    }
+    
 
     @PostMapping
     public ItemShortDto addNewItem(@RequestHeader(userIdFromHeader) Long userId,

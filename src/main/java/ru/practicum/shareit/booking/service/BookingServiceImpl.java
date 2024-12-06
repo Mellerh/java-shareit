@@ -2,9 +2,7 @@ package ru.practicum.shareit.booking.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingMapper;
@@ -13,6 +11,7 @@ import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.exceptions.AccessDeniedException;
+import ru.practicum.shareit.exception.exceptions.BadRequestException;
 import ru.practicum.shareit.exception.exceptions.DataConflictException;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
@@ -74,7 +73,7 @@ public class BookingServiceImpl implements BookingService {
 
         List<Item> itemList = itemRepository.findAllByOwnerId(user.getId());
         if (itemList.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "У пользователя " + userId + " нет ни одного Item");
+            return List.of();
         }
 
         // все id вещей, на которые есть бронирования
@@ -117,14 +116,14 @@ public class BookingServiceImpl implements BookingService {
                 -> new NotFoundException("Booking с id " + bookingId + " не найден."));
 
         // если userId не является владельцем вещи, на которое создан запрос одобрения
-        if (!user.getId().equals(booking.getBookingItem().getId())) {
+        if (!user.getId().equals(booking.getBookingItem().getOwner().getId())) {
             throw new DataConflictException("Пользователь с id " + userId
                     + " не является владельцем вещи");
         }
 
         if (booking.getStatus() != null && (booking.getStatus() == BookingStatus.APPROVED
                 || booking.getStatus() == BookingStatus.REJECTED)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Невозможно изменить статус аренды после.");
+            throw new BadRequestException("Статус бронирования уже изменён.");
         }
 
         if (approved) {
