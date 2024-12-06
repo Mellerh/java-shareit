@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.dto.BookingMapper;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
@@ -116,6 +118,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
+    /* метод добавляет в Item связанные с ним Booking */
     private Collection<ItemResponseDto> upgradeItemsInfo(List<Item> itemList, List<Booking> bookingList, LocalDateTime now) {
         List<ItemResponseDto> dtoList = new ArrayList<>();
 
@@ -125,6 +128,25 @@ public class ItemServiceImpl implements ItemService {
         Map<Long, List<Booking>> bookingListMap = bookingList.stream().
                 collect(Collectors.groupingBy(booking -> booking.getBookingItem().getId()));
 
+        // на стороне кода сортируем booking по дате и находим нужные
+        for (Item item : itemList) {
+            BookingShortDto lastBooking = bookingListMap.getOrDefault(item.getId(), Collections.emptyList()).stream()
+                    .filter(booking -> booking.getStart().isAfter(now))
+                    .sorted(Comparator.comparing(booking -> booking.getStart(), Comparator.naturalOrder()))
+                    .map(booking -> BookingMapper.toBookingShortDto(booking))
+                    .findFirst().orElse(null);
+
+            BookingShortDto nextBooking = bookingListMap.getOrDefault(item.getId(), Collections.emptyList()).stream()
+                    .filter(booking -> booking.getStart().isBefore(now))
+                    .sorted(Comparator.comparing(booking -> booking.getStart(), Comparator.reverseOrder()))
+                    .map(booking -> BookingMapper.toBookingShortDto(booking))
+                    .findFirst().orElse(null);
+
+            dtoList.add(ItemMapper.toItemDtoWithBooking(item, lastBooking, nextBooking));
+
+        }
+
+        return dtoList;
 
     }
 
