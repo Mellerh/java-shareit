@@ -8,7 +8,7 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 @Data
 @Builder
 @AllArgsConstructor
-public class ItemWithBookingDto {
+public class ItemResponseDto {
 
     private Long id;
 

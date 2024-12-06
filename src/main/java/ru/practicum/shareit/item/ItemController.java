@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.itemDtos.ItemCreateDto;
 import ru.practicum.shareit.item.dto.itemDtos.ItemDto;
-import ru.practicum.shareit.item.dto.itemDtos.ItemShortDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemResponseDto;
 import ru.practicum.shareit.item.dto.itemDtos.ItemUpdateDto;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -26,7 +26,7 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
-    public Collection<ItemShortDto> getAllUserItems(@RequestHeader(userIdFromHeader) Long userId) {
+    public Collection<ItemResponseDto> getAllUserItems(@RequestHeader(userIdFromHeader) Long userId) {
         return itemService.getAllUserItems(userId);
     }
 
@@ -39,13 +39,13 @@ public class ItemController {
     
 
     @PostMapping
-    public ItemShortDto addNewItem(@RequestHeader(userIdFromHeader) Long userId,
+    public ItemResponseDto addNewItem(@RequestHeader(userIdFromHeader) Long userId,
                               @Valid @RequestBody ItemCreateDto itemCreateDto) {
         return itemService.addNewItem(userId, itemCreateDto);
     }
 
     @PatchMapping("/{itemId}")
-    public ItemShortDto updateItem(@RequestHeader(userIdFromHeader) Long userId,
+    public ItemResponseDto updateItem(@RequestHeader(userIdFromHeader) Long userId,
                               @PathVariable Long itemId,
                               @Valid @RequestBody ItemUpdateDto itemUpdateDto) {
         return itemService.updateItem(userId, itemId, itemUpdateDto);

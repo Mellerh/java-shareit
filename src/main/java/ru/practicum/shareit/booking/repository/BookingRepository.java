@@ -12,6 +12,7 @@ import java.util.List;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
+
     List<Booking> findByBooker_Id(Long bookerId, Sort sort);
 
     List<Booking> findByBooker_IdAndStartBeforeAndEndAfter(Long bookerId, LocalDateTime start, LocalDateTime end, Sort sort);
@@ -22,6 +23,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByBooker_IdAndStatus(Long bookerId, BookingStatus status, Sort sort);
 
+
+    List<Booking> findByItem_IdIn(List<Long> itemIds);
 
     List<Booking> findByItem_IdIn(List<Long> itemIds, Sort sort);
 

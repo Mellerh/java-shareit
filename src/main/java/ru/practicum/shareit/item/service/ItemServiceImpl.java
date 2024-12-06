@@ -2,6 +2,8 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.itemDtos.*;
 import ru.practicum.shareit.item.model.Item;
@@ -9,9 +11,9 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +22,8 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+
 
     @Override
     public ItemDto getItemById(Long userId, Long itemId) {
@@ -37,18 +41,27 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toItemDto(item, user);
     }
 
+
     @Override
-    public Collection<ItemShortDto> getAllUserItems(Long userId) {
+    public Collection<ItemResponseDto> getAllUserItems(Long userId) {
+        LocalDateTime now = LocalDateTime.now();
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("User с id " + userId + " не найден."));
 
-        return itemRepository.findAllByOwnerId(user.getId()).stream()
-                .map(item -> ItemMapper.toShortItemDto(item))
-                .toList();
+        List<Item> itemList = itemRepository.findAllByOwnerId(user.getId());
+        List<Long> itemIds = itemList.stream().map(item -> item.getId()).toList();
+        List<Booking> bookingListByItemIdIn = bookingRepository.findByItem_IdIn(itemIds);
+
+        if (!bookingListByItemIdIn.isEmpty()) {
+            return upgradeItemsInfo(itemList, bookingListByItemIdIn, now);
+        } else {
+            return itemList.stream().map(item -> ItemMapper.toShortItemDto(item)).toList();
+        }
     }
 
+
     @Override
-    public ItemShortDto addNewItem(Long userId, ItemCreateDto itemDto) {
+    public ItemResponseDto addNewItem(Long userId, ItemCreateDto itemDto) {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("User с id " + userId + " не найден."));
 
@@ -57,8 +70,9 @@ public class ItemServiceImpl implements ItemService {
         return ItemMapper.toShortItemDto(itemRepository.save(item));
     }
 
+
     @Override
-    public ItemShortDto updateItem(Long userId, Long itemId, ItemUpdateDto itemUpdate) {
+    public ItemResponseDto updateItem(Long userId, Long itemId, ItemUpdateDto itemUpdate) {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("User с id " + userId + " не найден."));
 
@@ -89,6 +103,7 @@ public class ItemServiceImpl implements ItemService {
 
     }
 
+
     @Override
     public Collection<ItemDto> getAvailableItemsByText(String text) {
         if (text.isEmpty()) {
@@ -100,5 +115,17 @@ public class ItemServiceImpl implements ItemService {
                 .toList();
     }
 
+
+    private Collection<ItemResponseDto> upgradeItemsInfo(List<Item> itemList, List<Booking> bookingList, LocalDateTime now) {
+        List<ItemResponseDto> dtoList = new ArrayList<>();
+
+        // метод группирует список бронирований (bookingList) по id вещей, связанных с каждым бронированием.
+        // В результате получается Map, где ключом является id вещи (item),
+        // а значением — список бронирований, относящихся к этой вещи.
+        Map<Long, List<Booking>> bookingListMap = bookingList.stream().
+                collect(Collectors.groupingBy(booking -> booking.getBookingItem().getId()));
+
+
+    }
 
 }
