@@ -34,7 +34,7 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "item_id")
-    private Item bookingItem;
+    private Item item;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "booker_id")

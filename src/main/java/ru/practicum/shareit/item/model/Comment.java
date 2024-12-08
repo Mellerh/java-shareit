@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
+import java.time.LocalDateTime;
+
 
 @Builder
 @Getter
@@ -30,6 +32,10 @@ public class Comment {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @JoinColumn(name = "created")
+    @Builder.Default
+    private LocalDateTime created = LocalDateTime.now();
 
 }
 

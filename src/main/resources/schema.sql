@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS bookings (
 CREATE TABLE IF NOT EXISTS comments (
     comment_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     text VARCHAR NOT NULL,
+    created TIMESTAMP,
     item_id INT REFERENCES items (item_id) ON DELETE CASCADE,
     author_id INT REFERENCES users (user_id) ON DELETE CASCADE
 );

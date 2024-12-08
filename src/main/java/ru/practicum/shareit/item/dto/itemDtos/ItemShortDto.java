@@ -10,6 +10,7 @@ import lombok.Data;
 /* возвращаем короткое описание Item */
 public class ItemShortDto {
 
+    private Long id;
     private String name;
     private String description;
     private Boolean available;

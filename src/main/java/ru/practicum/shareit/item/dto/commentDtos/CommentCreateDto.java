@@ -11,7 +11,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class CommentCreateDto {
 
-    @NotBlank(message = "text должен быть заполнено")
+    @NotBlank(message = "text должен быть заполнен")
     private String text;
     @NotNull(message = "itemId не может отсутствовать")
     private Long itemId;

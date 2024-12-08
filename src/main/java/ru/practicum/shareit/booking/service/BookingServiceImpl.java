@@ -40,7 +40,7 @@ public class BookingServiceImpl implements BookingService {
                 -> new NotFoundException("Booking с id " + bookingId + " не найден."));
 
         if (user.getId().equals(bookingReq.getBooker().getId()) ||
-                userId.equals(bookingReq.getBookingItem().getOwner().getId())) {
+                userId.equals(bookingReq.getItem().getOwner().getId())) {
             return BookingMapper.toBookingDto(bookingReq);
         } else {
             throw new DataConflictException("Пользователь с id " + userId
@@ -116,7 +116,7 @@ public class BookingServiceImpl implements BookingService {
                 -> new NotFoundException("Booking с id " + bookingId + " не найден."));
 
         // если userId не является владельцем вещи, на которое создан запрос одобрения
-        if (!user.getId().equals(booking.getBookingItem().getOwner().getId())) {
+        if (!user.getId().equals(booking.getItem().getOwner().getId())) {
             throw new DataConflictException("Пользователь с id " + userId
                     + " не является владельцем вещи");
         }
