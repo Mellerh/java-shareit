@@ -1,19 +1,15 @@
 package ru.practicum.shareit.item.dto.commentDtos;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class CommentCreateDto {
 
-    @NotBlank(message = "text должен быть заполнен")
+    //    @NotBlank(message = "text должен быть заполнен")
     private String text;
-    @NotNull(message = "itemId не может отсутствовать")
-    private Long itemId;
 
 }

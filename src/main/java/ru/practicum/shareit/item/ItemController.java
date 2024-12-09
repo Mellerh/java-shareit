@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.commentDtos.CommentCreateDto;
 import ru.practicum.shareit.item.dto.commentDtos.CommentDto;
 import ru.practicum.shareit.item.dto.itemDtos.ItemCreateDto;
-import ru.practicum.shareit.item.dto.itemDtos.ItemDto;
 import ru.practicum.shareit.item.dto.itemDtos.ItemResponseDto;
 import ru.practicum.shareit.item.dto.itemDtos.ItemUpdateDto;
 import ru.practicum.shareit.item.service.ItemService;
@@ -57,9 +56,9 @@ public class ItemController {
      * поиск вещи потенциальным арендатором
      */
     @GetMapping("/search")
-    public Collection<ItemDto> getAvailableItemsByText(@RequestHeader(userIdFromHeader) Long userId,
+    public Collection<ItemResponseDto> getAvailableItemsByText(@RequestHeader(userIdFromHeader) Long userId,
                                                        @RequestParam(required = false) String text) {
-        return itemService.getAvailableItemsByText(text);
+        return itemService.getAvailableItemsByText(userId, text);
     }
 
 
@@ -69,7 +68,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public CommentDto createCommentForItem(@RequestHeader(userIdFromHeader) Long userId,
                                            @PathVariable Long itemId,
-                                           @Valid @RequestBody CommentCreateDto createDto) {
+                                           @RequestBody CommentCreateDto createDto) {
         return itemService.createCommentForItem(userId, itemId, createDto);
     }
 

@@ -11,7 +11,10 @@ import ru.practicum.shareit.exception.exceptions.NotFoundException;
 import ru.practicum.shareit.item.dto.commentDtos.CommentCreateDto;
 import ru.practicum.shareit.item.dto.commentDtos.CommentDto;
 import ru.practicum.shareit.item.dto.commentDtos.CommentMapper;
-import ru.practicum.shareit.item.dto.itemDtos.*;
+import ru.practicum.shareit.item.dto.itemDtos.ItemCreateDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemMapper;
+import ru.practicum.shareit.item.dto.itemDtos.ItemResponseDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemUpdateDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
@@ -47,14 +50,15 @@ public class ItemServiceImpl implements ItemService {
         List<CommentDto> commentList = commentRepository.findAllByItemIdOrderByCreatedDesc(itemId)
                 .stream().map(comment -> CommentMapper.toCommentDto(comment)).toList();
 
-        BookingShortDto nextBooking = BookingMapper.toBookingShortDto(
-                bookingRepository.findNextBookingByItemId(itemId, now));
-        BookingShortDto lastBooking = BookingMapper.toBookingShortDto(
-                bookingRepository.findLastBookingByItemId(itemId, now));
+        Booking bookingNext = bookingRepository.findNextBookingByItemId(itemId, now);
+        BookingShortDto bookingNextDto = (bookingNext != null) ? BookingMapper.toBookingShortDto(bookingNext) : null;
+
+        Booking bookingLast = bookingRepository.findLastBookingByItemId(itemId, now);
+        BookingShortDto bookingLastDto = (bookingLast != null) ? BookingMapper.toBookingShortDto(bookingLast) : null;
 
 
         if (user.equals(item.getOwner())) {
-            return ItemMapper.toItemDtoWithBooking(item, lastBooking, nextBooking, commentList);
+            return ItemMapper.toItemDtoWithBooking(item, bookingLastDto, bookingNextDto, commentList);
         } else {
             return ItemMapper.toItemDtoWithBooking(item, null, null, commentList);
         }
@@ -126,13 +130,16 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public Collection<ItemDto> getAvailableItemsByText(String text) {
-        if (text.isEmpty()) {
-            return new ArrayList<>();
+    public Collection<ItemResponseDto> getAvailableItemsByText(Long userId, String text) {
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("User с id " + userId + " не найден."));
+
+        if (text.isBlank()) {
+            return Collections.emptyList();
         }
 
         return itemRepository.searchByText(text).stream()
-                .map(item -> ItemMapper.toItemDto(item, item.getOwner()))
+                .map(item -> ItemMapper.toShortItemDto(item))
                 .toList();
     }
 
@@ -157,13 +164,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
-
-
-
-
-
-
-    /* метод добавляет в Item связанные с ним Booking */
+    /* метод добавляет в Item связанные с ним Booking и commentList */
     private Collection<ItemResponseDto> upgradeItemsInfo(List<Item> itemList, List<Booking> bookingList,
                                                          List<Comment> commentList, LocalDateTime now) {
 

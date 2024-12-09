@@ -14,8 +14,8 @@ public class BookingMapper {
     public static Booking toBookingModel(BookingCreateDto bookingCreateDto,
                                   User user, Item item) {
         return Booking.builder()
-                .start(bookingCreateDto.getStartTime())
-                .end(bookingCreateDto.getEndTime())
+                .start(bookingCreateDto.getStart())
+                .end(bookingCreateDto.getEnd())
                 .status(bookingCreateDto.getStatus() != null ? bookingCreateDto.getStatus() : BookingStatus.WAITING)
                 .item(item)
                 .booker(user)
@@ -28,7 +28,7 @@ public class BookingMapper {
                 .start(booking.getStart())
                 .end(booking.getEnd())
                 .status(booking.getStatus())
-                .bookingItem(ItemMapper.toShortItemDto(booking.getItem()))
+                .item(ItemMapper.toShortItemDto(booking.getItem()))
                 .booker(UserMapper.toUserDto(booking.getBooker()))
                 .build();
     }

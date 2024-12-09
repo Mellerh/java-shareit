@@ -3,32 +3,30 @@ package ru.practicum.shareit.booking.dto;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import ru.practicum.shareit.booking.model.BookingStatus;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @Builder
-@AllArgsConstructor
 public class BookingCreateDto {
 
     @FutureOrPresent
-    private LocalDateTime startTime;
+    private LocalDateTime start;
     @Future
-    private LocalDateTime endTime;
+    private LocalDateTime end;
 
-    @NotNull
-    private Long itemBookingId;
+    private Long itemId;
 
     private BookingStatus status;
 
     @AssertTrue(message = "Некооректные даты бронирования. Начало аренды не может идти после её окончания.")
-    boolean isStartBeforeEnd() {
-        return startTime.isBefore(endTime);
+    public boolean isStartBeforeEnd() {
+        return this.start.isBefore(this.end);
     }
 
 }

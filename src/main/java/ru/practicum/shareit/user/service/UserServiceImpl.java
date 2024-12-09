@@ -36,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserCreateDto userCreateDto) {
+
+        // добавил сюда предварительную проверку на занятый email. Хоть в БД есть ограничение UNIQUE, при запросе создания
+        // СУБД создаст id даже, если пользователь не создаться. И из-за этого у меня были проблемы с postman.
+        // User с id 3 не существовал. После 2 сразу идёт 4. existsByEmail исправила ошибку. но я не уверен, правильно ли это
         if (userRepository.existsByEmail(userCreateDto.getEmail())) {
             throw new DuplicatedDataException("Пользователь с " + userCreateDto.getEmail() + " уже существует.");
         }

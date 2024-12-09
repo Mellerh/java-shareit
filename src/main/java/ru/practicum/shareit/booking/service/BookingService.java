@@ -13,7 +13,7 @@ public interface BookingService {
 
     BookingDto addNewBooking(Long userId, BookingCreateDto bookingCreateDto);
 
-    BookingDto approveBooking(Long userId, Long bookingId, Boolean approved) throws DataConflictException;
+    BookingDto approveBooking(Long userId, Long bookingId, Boolean approved);
 
     BookingDto getBookingById(Long userId, Long bookingId) throws DataConflictException;
 

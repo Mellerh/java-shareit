@@ -10,7 +10,6 @@ import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
-import ru.practicum.shareit.exception.exceptions.AccessDeniedException;
 import ru.practicum.shareit.exception.exceptions.BadRequestException;
 import ru.practicum.shareit.exception.exceptions.DataConflictException;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
@@ -91,15 +90,20 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto addNewBooking(Long userId, BookingCreateDto bookingCreateDto) {
-        Item item = itemRepository.findById(bookingCreateDto.getItemBookingId()).orElseThrow(()
-                -> new NotFoundException("Item с id " + bookingCreateDto.getItemBookingId() + " не найден."));
+        Item item = itemRepository.findById(bookingCreateDto.getItemId()).orElseThrow(()
+                -> new NotFoundException("Item с id " + bookingCreateDto.getItemId() + " не найден."));
 
-        if (!item.getAvailable()) {
-            throw new AccessDeniedException("Item с id " + item.getId() + " не доступен для брони.");
-        }
 
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("Пользователь с id " + userId + " не найден."));
+
+        if (!item.getAvailable()) {
+            throw new BadRequestException("Item с id " + item.getId() + " не доступен для брони.");
+        }
+
+        if (item.getOwner().equals(user)) {
+            throw new NotFoundException("Бронь вещи " + item.getId() + " не доступна для пользователя " + user.getId());
+        }
 
         Booking newBooking = BookingMapper.toBookingModel(bookingCreateDto, user, item);
 
@@ -108,18 +112,24 @@ public class BookingServiceImpl implements BookingService {
 
 
     @Override
-    public BookingDto approveBooking(Long userId, Long bookingId, Boolean approved) throws DataConflictException {
-        User user = userRepository.findById(userId).orElseThrow(()
-                -> new NotFoundException("Пользователь с id " + userId + " не найден."));
+    public BookingDto approveBooking(Long userId, Long bookingId, Boolean approved) {
+//        User user = userRepository.findById(userId).orElseThrow(()
+//                -> new NotFoundException("Пользователь с id " + userId + " не найден."));
+//
+//        Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
+//                -> new NotFoundException("Booking с id " + bookingId + " не найден."));
 
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
-                -> new NotFoundException("Booking с id " + bookingId + " не найден."));
+        Booking booking = bookingRepository.findBookingByOwner(userId, bookingId);
+        if (booking == null) {
+            throw new BadRequestException("Пользователь с id " + userId
+                    + " не является владельцем вещи c id " + bookingId);
+        }
 
         // если userId не является владельцем вещи, на которое создан запрос одобрения
-        if (!user.getId().equals(booking.getItem().getOwner().getId())) {
-            throw new DataConflictException("Пользователь с id " + userId
-                    + " не является владельцем вещи");
-        }
+//        if (!userId.equals(booking.getItem().getOwner().getId())) {
+//            throw new BadRequestException("Пользователь с id " + userId
+//                    + " не является владельцем вещи c id " + booking.getItem().getId());
+//        }
 
         if (booking.getStatus() != null && (booking.getStatus() == BookingStatus.APPROVED
                 || booking.getStatus() == BookingStatus.REJECTED)) {

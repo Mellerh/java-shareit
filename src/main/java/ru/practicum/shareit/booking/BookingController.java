@@ -12,9 +12,6 @@ import ru.practicum.shareit.exception.exceptions.DataConflictException;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-bookings.
- */
 @RestController
 @RequestMapping(path = "/bookings")
 @Validated
@@ -58,7 +55,7 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public BookingDto approveBooking(@RequestHeader(userIdFromHeader) Long userId,
                                      @PathVariable Long bookingId,
-                                     @RequestParam Boolean approved) throws DataConflictException {
+                                     @RequestParam Boolean approved) {
         return bookingService.approveBooking(userId, bookingId, approved);
     }
 
