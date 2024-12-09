@@ -13,9 +13,6 @@ import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.Collection;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping("/items")
 @Validated
@@ -31,13 +28,11 @@ public class ItemController {
         return itemService.getAllUserItems(userId);
     }
 
-
     @GetMapping("/{itemId}")
     public ItemResponseDto getItemById(@RequestHeader(userIdFromHeader) Long userId,
                                @PathVariable Long itemId) {
         return itemService.getItemById(userId, itemId);
     }
-    
 
     @PostMapping
     public ItemResponseDto addNewItem(@RequestHeader(userIdFromHeader) Long userId,
@@ -60,7 +55,6 @@ public class ItemController {
                                                        @RequestParam(required = false) String text) {
         return itemService.getAvailableItemsByText(userId, text);
     }
-
 
     /**
      * добавляем комментарий для вещи
