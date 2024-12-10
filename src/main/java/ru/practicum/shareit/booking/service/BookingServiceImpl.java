@@ -71,7 +71,7 @@ public class BookingServiceImpl implements BookingService {
                 -> new NotFoundException("Пользователь с id " + userId + " не найден."));
 
         List<Item> itemList = itemRepository.findAllByOwnerId(user.getId());
-        if (itemList.isEmpty()) {
+        if (itemList == null || itemList.isEmpty()) {
             return List.of();
         }
 
@@ -113,23 +113,12 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDto approveBooking(Long userId, Long bookingId, Boolean approved) {
-//        User user = userRepository.findById(userId).orElseThrow(()
-//                -> new NotFoundException("Пользователь с id " + userId + " не найден."));
-//
-//        Booking booking = bookingRepository.findById(bookingId).orElseThrow(()
-//                -> new NotFoundException("Booking с id " + bookingId + " не найден."));
 
         Booking booking = bookingRepository.findBookingByOwner(userId, bookingId);
         if (booking == null) {
             throw new BadRequestException("Пользователь с id " + userId
                     + " не является владельцем вещи c id " + bookingId);
         }
-
-        // если userId не является владельцем вещи, на которое создан запрос одобрения
-//        if (!userId.equals(booking.getItem().getOwner().getId())) {
-//            throw new BadRequestException("Пользователь с id " + userId
-//                    + " не является владельцем вещи c id " + booking.getItem().getId());
-//        }
 
         if (booking.getStatus() != null && (booking.getStatus() == BookingStatus.APPROVED
                 || booking.getStatus() == BookingStatus.REJECTED)) {

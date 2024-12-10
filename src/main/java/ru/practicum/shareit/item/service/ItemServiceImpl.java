@@ -50,15 +50,16 @@ public class ItemServiceImpl implements ItemService {
         List<CommentDto> commentList = commentRepository.findAllByItemIdOrderByCreatedDesc(itemId)
                 .stream().map(comment -> CommentMapper.toCommentDto(comment)).toList();
 
-        Booking bookingNext = bookingRepository.findNextBookingByItemId(itemId, now);
-        BookingShortDto bookingNextDto = (bookingNext != null) ? BookingMapper.toBookingShortDto(bookingNext) : null;
-
-        Booking bookingLast = bookingRepository.findLastBookingByItemId(itemId, now);
-        BookingShortDto bookingLastDto = (bookingLast != null) ? BookingMapper.toBookingShortDto(bookingLast) : null;
-
 
         if (user.equals(item.getOwner())) {
+            Booking bookingNext = bookingRepository.findNextBookingByItemId(itemId, now);
+            BookingShortDto bookingNextDto = (bookingNext != null) ? BookingMapper.toBookingShortDto(bookingNext) : null;
+
+            Booking bookingLast = bookingRepository.findLastBookingByItemId(itemId, now);
+            BookingShortDto bookingLastDto = (bookingLast != null) ? BookingMapper.toBookingShortDto(bookingLast) : null;
+
             return ItemMapper.toItemDtoWithBooking(item, bookingLastDto, bookingNextDto, commentList);
+
         } else {
             return ItemMapper.toItemDtoWithBooking(item, null, null, commentList);
         }
@@ -134,7 +135,7 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("User с id " + userId + " не найден."));
 
-        if (text.isBlank()) {
+        if (text == null || text.isBlank()) {
             return Collections.emptyList();
         }
 
