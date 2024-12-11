@@ -17,76 +17,58 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
     private final UserRepository userRepository;
 
     @Override
     public List<UserDto> getAllUsers() {
-        return userRepository.getAllUsers().stream()
-                .map(user -> userMapper.toUserDto(user))
+        return userRepository.findAll().stream()
+                .map(user -> UserMapper.toUserDto(user))
                 .toList();
     }
 
     @Override
     public UserDto getUserById(Long userId) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("Пользователь с id " + userId + " не найден.");
-        }
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь с id " + userId + " не найден."));
 
-        return userMapper.toUserDto(user);
+        return UserMapper.toUserDto(user);
     }
 
     @Override
     public UserDto createUser(UserCreateDto userCreateDto) {
 
-
-        User user = userMapper.toUserModel(userCreateDto);
-
-        // провярем, занят ли email
-        if (userRepository.isUserEmailEngaged(user.getId(), user.getEmail())) {
-            throw new DuplicatedDataException("Пользователь с email " + userCreateDto.getEmail() + " уже существует.");
+        // добавил сюда предварительную проверку на занятый email. Хоть в БД есть ограничение UNIQUE, при запросе создания
+        // СУБД создаст id даже, если пользователь не создаться. И из-за этого у меня были проблемы с postman.
+        // User с id 3 не существовал. После 2 сразу идёт 4. existsByEmail исправила ошибку. но я не уверен, правильно ли это
+        if (userRepository.existsByEmail(userCreateDto.getEmail())) {
+            throw new DuplicatedDataException("Пользователь с " + userCreateDto.getEmail() + " уже существует.");
         }
 
-        return userMapper.toUserDto(userRepository.createUser(user));
+        User user = UserMapper.toUserModel(userCreateDto);
+
+        return UserMapper.toUserDto(userRepository.save(user));
 
     }
 
     @Override
     public UserDto userUpdate(Long userId, UserUpdateDto userUpdateDto) {
-
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("Пользователь с id " + userUpdateDto + " не найден.");
-        }
+        User user = userRepository.findById(userId).orElseThrow(()
+                -> new NotFoundException("Пользователь с id " + userId + " не найден."));
 
         if (userUpdateDto.getName() != null) {
             user.setName(userUpdateDto.getName());
         }
 
-
-        // обновляем email
         if (userUpdateDto.getEmail() != null) {
-
-            // проверяем не используется ли email у других User
-            if (userRepository.isUserEmailEngaged(user.getId(), userUpdateDto.getEmail())) {
-                throw new DuplicatedDataException("Пользователь с email " + userUpdateDto.getEmail() + " уже существует.");
-            }
-
             user.setEmail(userUpdateDto.getEmail());
         }
 
-        return userMapper.toUserDto(userRepository.userUpdate(user));
+        return UserMapper.toUserDto(userRepository.save(user));
 
     }
 
     @Override
     public void deleteUser(Long userId) {
-        User user = userRepository.getUserById(userId);
-        if (user == null) {
-            throw new NotFoundException("Пользователь с id " + userId + " не найден.");
-        }
-
-        userRepository.deleteUser(userId);
+        userRepository.deleteById(userId);
     }
 }

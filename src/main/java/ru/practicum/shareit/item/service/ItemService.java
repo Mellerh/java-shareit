@@ -1,24 +1,27 @@
 package ru.practicum.shareit.item.service;
 
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.dto.ItemCreateDto;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemShortDto;
-import ru.practicum.shareit.item.dto.ItemUpdateDto;
+import ru.practicum.shareit.item.dto.commentDtos.CommentCreateDto;
+import ru.practicum.shareit.item.dto.commentDtos.CommentDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemCreateDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemResponseDto;
+import ru.practicum.shareit.item.dto.itemDtos.ItemUpdateDto;
 
 import java.util.Collection;
 
 @Service
 public interface ItemService {
 
-    ItemDto getItemById(Long userId, Long itemId);
+    ItemResponseDto getItemById(Long userId, Long itemId);
 
-    Collection<ItemShortDto> getAllUserItems(Long userId);
+    Collection<ItemResponseDto> getAllUserItems(Long userId);
 
-    ItemDto addNewItem(Long userId, ItemCreateDto item);
+    ItemResponseDto addNewItem(Long userId, ItemCreateDto item);
 
-    ItemDto updateItem(Long userId, Long itemId, ItemUpdateDto item);
+    ItemResponseDto updateItem(Long userId, Long itemId, ItemUpdateDto item);
 
-    Collection<ItemDto> getAvailableItemsByText(String text);
+    Collection<ItemResponseDto> getAvailableItemsByText(Long userId, String text);
+
+    CommentDto createCommentForItem(Long userId, Long itemId, CommentCreateDto createDto);
 
 }

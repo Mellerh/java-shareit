@@ -1,0 +1,26 @@
+services:
+  db: # имя сервиса. Оно может быть любым
+    image: postgres:14-alpine
+    container_name: shareit-db
+    ports:
+      - "6541:5432"
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=shareit
+      - POSTGRES_USER=shareit
+      - POSTGRES_PASSWORD=shareit
+
+
+#  server:
+#    build: .
+#    image: shareit-server
+#    container_name: shareit-server
+#    ports:
+#      - "9090:9090"
+#    depends_on:
+#      - db
+#    environment:
+#      - STRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
+#      - STRING_DATASOURCE_USERNAME=shareit
+#      - STRING_DATASOURCE_PASSWORD=shareit
