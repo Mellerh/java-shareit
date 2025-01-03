@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.client.ItemClient;
 import ru.practicum.shareit.item.dto.commentDtos.CommentCreateDto;
 import ru.practicum.shareit.item.dto.itemDtos.ItemCreateDto;
-import ru.practicum.shareit.item.dto.itemDtos.ItemUpdateDto;
 
 @RestController
 @RequestMapping("/items")
@@ -40,7 +39,7 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(@RequestHeader(userIdFromHeader) Long userId,
                                       @PathVariable Long itemId,
-                                      @Valid @RequestBody ItemUpdateDto itemUpdateDto) {
+                                             @Valid @RequestBody ItemCreateDto itemUpdateDto) {
         return itemService.updateItem(userId, itemId, itemUpdateDto);
     }
 

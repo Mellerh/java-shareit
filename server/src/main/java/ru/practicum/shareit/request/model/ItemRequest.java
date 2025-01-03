@@ -2,9 +2,11 @@ package ru.practicum.shareit.request.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Builder
@@ -31,6 +33,9 @@ public class ItemRequest {
 
     @Column(name = "creation_date")
     private LocalDateTime created;
+
+    @OneToMany(mappedBy = "request", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Item> items;
 
 }
 

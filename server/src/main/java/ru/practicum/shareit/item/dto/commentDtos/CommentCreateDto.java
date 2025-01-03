@@ -9,7 +9,6 @@ import lombok.*;
 @Setter
 public class CommentCreateDto {
 
-    //    @NotBlank(message = "text должен быть заполнен")
     private String text;
 
 }
