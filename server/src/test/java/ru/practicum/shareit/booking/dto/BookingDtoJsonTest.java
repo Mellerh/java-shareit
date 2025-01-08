@@ -1,6 +1,7 @@
 //package ru.practicum.shareit.booking.dto;
 //
 //import lombok.RequiredArgsConstructor;
+//import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.json.JsonTest;
@@ -20,6 +21,7 @@
 //    private final JacksonTester<BookingDto> json;
 //
 //    @Test
+//    @DisplayName("Тестируем корректную серриализацию BookingDto в Json-строку")
 //    void toBookingDto() throws Exception {
 //
 //        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;

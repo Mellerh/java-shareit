@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.practicum.shareit.booking.dto.BookingCreateDto;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.BookingState;
+import ru.practicum.shareit.booking.model.BookingStatus;
+import ru.practicum.shareit.exception.exceptions.BadRequestException;
 import ru.practicum.shareit.exception.exceptions.NotFoundException;
 import ru.practicum.shareit.user.dto.UserCreateDto;
 import ru.practicum.shareit.user.dto.UserDto;
@@ -126,39 +128,37 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    @DisplayName("Проверяем измнение статус booking на APPROVED")
+    @DisplayName("Проверяем измнение статуса booking на APPROVED " +
+            "и проверяем выбрасывание ошибки при повторной попытке изменения брони")
     void approveBooking() {
-        addNewUserAndBooking();
+//        addNewUserAndBooking();
 
         long userId = 1L;
         long bookingId = 1L;
-        boolean approve = true;
+        Boolean approve = true;
 
-        
+        BookingDto bookingDto = bookingService.approveBooking(userId, bookingId, approve);
+        Assertions.assertEquals(BookingStatus.APPROVED, bookingDto.getStatus());
+
+        // попытка повторного изменения статуса должна привести к ошибке
+        Assertions.assertThrows(BadRequestException.class,
+                () -> bookingService.approveBooking(userId, bookingId, approve));
 
     }
 
     @Test
     @DisplayName("Проверяем измнение статус booking на REJECTED")
     void rejectedBooking() {
+
+        long userId = 1L;
+        long bookingId = 1L;
+        Boolean approve = false;
+
+        BookingDto bookingDto = bookingService.approveBooking(userId, bookingId, approve);
+        Assertions.assertEquals(BookingStatus.REJECTED, bookingDto.getStatus());
+
     }
 
 
 
-
-
-    private void addNewUserAndBooking() {
-        UserCreateDto createUserDto = UserCreateDto.builder().name("Vasya").email("vasya@yandex.ru").build();
-        UserDto user = userService.createUser(createUserDto);
-        long otherUserId = user.getId();
-
-        BookingCreateDto createBookingDto = BookingCreateDto
-                .builder()
-                .start(LocalDateTime.now())
-                .end(LocalDateTime.now().plusHours(2))
-                .itemId(1L)
-                .build();
-
-        bookingService.addNewBooking(otherUserId, createBookingDto);
-    }
 }
