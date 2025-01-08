@@ -1,13 +1,16 @@
 package ru.practicum.shareit.item.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.item.ItemController;
 import ru.practicum.shareit.item.dto.commentDtos.CommentCreateDto;
 import ru.practicum.shareit.item.dto.commentDtos.CommentDto;
 import ru.practicum.shareit.item.dto.itemDtos.ItemCreateDto;
@@ -15,9 +18,14 @@ import ru.practicum.shareit.item.dto.itemDtos.ItemResponseDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@WebMvcTest(ItemControllerTest.class)
+@WebMvcTest(ItemController.class)
 @AutoConfigureMockMvc
 class ItemControllerTest {
 
@@ -33,7 +41,25 @@ class ItemControllerTest {
 
 
     @Test
-    void getAllUserItems() {
+    @DisplayName("Провереяем get-запрос на /items и возвращение пустого листа")
+    void getAllUserItemsWithEmptyList() throws Exception {
+
+        long userId = 1L;
+
+        Mockito
+                .when(itemService.getAllUserItems(Mockito.anyLong()))
+                .thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/items")
+                                    .header("X-Sharer-User-Id", userId))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+
+
+        Mockito.verify(itemService, Mockito.times(1))
+                .getAllUserItems(userId);
+
+
     }
 
     @Test
@@ -56,6 +82,8 @@ class ItemControllerTest {
     void createCommentForItem() {
     }
 
+
+
     private ItemCreateDto createItemCreateDto() {
         return ItemCreateDto.builder()
                 .name("Phone")
@@ -63,7 +91,6 @@ class ItemControllerTest {
                 .available(true)
                 .build();
     }
-
 
     private ItemResponseDto createItemResponseDto() {
 
@@ -93,7 +120,6 @@ class ItemControllerTest {
                 .comments(java.util.List.of(commentDto))
                 .build();
     }
-
 
     private CommentCreateDto createCommentCreateDto() {
         return CommentCreateDto.builder().text("comment for Item").build();
