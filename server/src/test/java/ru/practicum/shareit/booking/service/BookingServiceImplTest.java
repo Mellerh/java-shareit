@@ -1,6 +1,5 @@
 package ru.practicum.shareit.booking.service;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class BookingServiceImplTest {
 
-    private final EntityManager manager;
     private final BookingService bookingService;
     private final UserService userService;
 
@@ -39,7 +37,6 @@ public class BookingServiceImplTest {
 
         BookingDto bookingDto = bookingService.getBookingById(userId, bookingId);
         Assertions.assertEquals("WAITING", bookingDto.getStatus().name());
-
     }
 
     @Test

@@ -71,7 +71,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public Collection<ItemResponseDto> getAllUserItems(Long userId) {
+    public List<ItemResponseDto> getAllUserItems(Long userId) {
         LocalDateTime now = LocalDateTime.now();
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("User с id " + userId + " не найден."));
@@ -140,7 +140,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     @Override
-    public Collection<ItemResponseDto> getAvailableItemsByText(Long userId, String text) {
+    public List<ItemResponseDto> getAvailableItemsByText(Long userId, String text) {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("User с id " + userId + " не найден."));
 
@@ -175,7 +175,7 @@ public class ItemServiceImpl implements ItemService {
 
 
     /* метод добавляет в Item связанные с ним Booking и commentList */
-    private Collection<ItemResponseDto> upgradeItemsInfo(List<Item> itemList, List<Booking> bookingList,
+    private List<ItemResponseDto> upgradeItemsInfo(List<Item> itemList, List<Booking> bookingList,
                                                          List<Comment> commentList, LocalDateTime now) {
 
         List<ItemResponseDto> dtoList = new ArrayList<>();

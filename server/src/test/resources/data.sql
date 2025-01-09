@@ -1,7 +1,6 @@
 INSERT INTO users (name, email)
 VALUES ('Taras', 'vasilenko.taras2015@yandex.ru');
 
-
 INSERT INTO items (owner_id, name, description, available)
 VALUES (1, 'Phone', 'good phone', TRUE);
 
