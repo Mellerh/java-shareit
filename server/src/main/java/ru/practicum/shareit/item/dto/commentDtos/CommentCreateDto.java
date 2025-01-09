@@ -1,12 +1,14 @@
 package ru.practicum.shareit.item.dto.commentDtos;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 public class CommentCreateDto {
 
     private String text;

@@ -60,6 +60,7 @@ public class ItemController {
     public CommentDto createCommentForItem(@RequestHeader(userIdFromHeader) Long userId,
                                            @PathVariable Long itemId,
                                            @RequestBody CommentCreateDto createDto) {
+
         return itemService.createCommentForItem(userId, itemId, createDto);
     }
 
