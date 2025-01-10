@@ -16,13 +16,14 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserUpdateDto;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -100,15 +101,68 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser() {
+    @DisplayName("Тестируем post-запрос на /users")
+    void createUser() throws Exception {
+
+        UserCreateDto createDto = createUserCreateDto();
+        UserDto userDto = createUserDto();
+
+        Mockito
+                .when(userService.createUser(Mockito.any()))
+                .thenReturn(userDto);
+
+        mockMvc.perform(post("/users")
+                .content(mapper.writeValueAsString(createDto))
+                .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk(),
+                jsonPath("$.id", is(userDto.getId()), Long.class)
+        );
+
+        Mockito.verify(userService, Mockito.times(1))
+                .createUser(createDto);
     }
 
     @Test
-    void userUpdate() {
+    @DisplayName("Проверяем работу patch-запроса на /users/{id}")
+    void userUpdate() throws Exception {
+
+        long userId = 1L;
+        UserUpdateDto userUpdateDto = createUserUpdateDto();
+        UserDto userDto = createUserDto();
+        userDto.setName(userUpdateDto.getName());
+
+        Mockito
+                .when(userService.userUpdate(userId, userUpdateDto))
+                .thenReturn(userDto);
+
+        mockMvc.perform(patch("/users/1")
+                .content(mapper.writeValueAsString(userUpdateDto))
+                .characterEncoding(StandardCharsets.UTF_8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpectAll(
+                status().isOk(),
+                jsonPath("$.name", equalTo(userDto.getName()))
+        );
+
+        Mockito.verify(userService, Mockito.times(1))
+                .userUpdate(userId, userUpdateDto);
     }
 
     @Test
-    void deleteUser() {
+    @DisplayName("Проверяем работу delete-запроса на /users/{id}")
+    void deleteUser() throws Exception {
+
+        long userId = 1L;
+
+        mockMvc.perform(delete("/users/1")
+        ).andExpect(
+                status().isOk()
+        );
+
     }
 
 
