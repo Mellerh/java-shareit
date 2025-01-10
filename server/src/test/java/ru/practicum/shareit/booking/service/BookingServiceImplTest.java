@@ -29,7 +29,7 @@ public class BookingServiceImplTest {
     private final UserService userService;
 
     @Test
-    @DisplayName("Провряем корректное получение Booking из таблицы по ID")
+    @DisplayName("Провряем коректное получение Booking из таблицы по ID")
     void getBookingByCorrectId() throws Exception {
 
         long userId = 1L;

@@ -56,10 +56,16 @@ public class UserServiceImpl implements UserService {
                 -> new NotFoundException("Пользователь с id " + userId + " не найден."));
 
         if (userUpdateDto.getName() != null) {
+
             user.setName(userUpdateDto.getName());
         }
 
         if (userUpdateDto.getEmail() != null) {
+
+            if (userRepository.existsByEmail(userUpdateDto.getEmail())) {
+                throw new DuplicatedDataException("Пользователь с " + userUpdateDto.getEmail() + " уже существует.");
+            }
+
             user.setEmail(userUpdateDto.getEmail());
         }
 
