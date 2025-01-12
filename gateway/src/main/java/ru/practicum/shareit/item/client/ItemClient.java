@@ -52,7 +52,7 @@ public class ItemClient extends BaseClient {
         return get("/search?text={text}", userId, parameters);
     }
 
-    public ResponseEntity<Object> createCommentForItem(Long userId, Long ItemId, CommentCreateDto createDto) {
-        return post("/" + ItemId + "/comment", userId, createDto);
+    public ResponseEntity<Object> createCommentForItem(Long userId, Long itemId, CommentCreateDto createDto) {
+        return post("/" + itemId + "/comment", userId, createDto);
     }
 }
