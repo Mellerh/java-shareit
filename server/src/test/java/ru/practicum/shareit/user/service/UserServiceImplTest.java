@@ -41,7 +41,6 @@ class UserServiceImplTest {
 
         UserDto userDto = userService.getUserById(userId);
         Assertions.assertEquals("Taras", userDto.getName());
-
     }
 
     @Test
@@ -52,7 +51,6 @@ class UserServiceImplTest {
 
         Assertions.assertThrows(NotFoundException.class,
                 () -> userService.getUserById(userId));
-
     }
 
     @Test
@@ -68,7 +66,6 @@ class UserServiceImplTest {
         UserDto userDto = userService.createUser(createDto);
         Assertions.assertEquals(2, userDto.getId());
         Assertions.assertEquals("Sasha", userDto.getName());
-        
     }
 
     @Test
