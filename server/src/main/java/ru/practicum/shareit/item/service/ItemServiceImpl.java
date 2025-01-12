@@ -159,16 +159,13 @@ public class ItemServiceImpl implements ItemService {
         User user = userRepository.findById(userId).orElseThrow(()
                 -> new NotFoundException("User с id " + userId + " не найден."));
 
-        Item item = itemRepository.findById(itemId).orElseThrow(()
-                -> new NotFoundException("Item с id " + itemId + " не найдена."));
-
         LocalDateTime now = LocalDateTime.now();
         Booking booking = bookingRepository.findFirstByBookerIdAndItemIdAndEndBefore(userId, itemId, now);
         if (booking == null) {
             throw new BadRequestException("Пользователь " + user + " не брал в аренду вещь " + itemId);
         }
 
-        Comment comment = CommentMapper.toCommentModel(createDto, item, user);
+        Comment comment = CommentMapper.toCommentModel(createDto, booking.getItem(), booking.getBooker());
 
         return CommentMapper.toCommentDto(commentRepository.save(comment));
     }

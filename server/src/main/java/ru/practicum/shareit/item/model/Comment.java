@@ -22,10 +22,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "text", nullable = false)
+    @Column(name = "text")
     private String text;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
@@ -34,8 +34,7 @@ public class Comment {
     private User user;
 
     @JoinColumn(name = "created")
-    @Builder.Default
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created;
 
 }
 

@@ -9,3 +9,6 @@ VALUES ('2024-01-21 15:30:00', '2024-01-22 15:30:00', 'WAITING', 1, 1);
 
 INSERT INTO comments (text, created, item_id, user_id)
 VALUES ('comment good phone', '2024-01-23 15:30:00', 1, 1);
+
+INSERT INTO item_requests (description, requestor_id, creation_date)
+VALUES ('request on item', 1, '2024-01-23 16:00:00');

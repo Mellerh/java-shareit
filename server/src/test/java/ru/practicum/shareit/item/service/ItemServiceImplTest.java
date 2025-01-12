@@ -2,6 +2,7 @@ package ru.practicum.shareit.item.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.List;
 @Transactional
 @SpringBootTest
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Slf4j
 class ItemServiceImplTest {
 
     private final ItemService itemService;
@@ -34,6 +36,7 @@ class ItemServiceImplTest {
 
         ItemResponseDto item = itemService.getItemById(userId, itemId);
         Assertions.assertEquals("Phone", item.getName());
+        Assertions.assertEquals(1, item.getComments().size());
     }
 
     @Test
@@ -124,6 +127,8 @@ class ItemServiceImplTest {
         ItemResponseDto itemResponseDto = itemService.getItemById(userId, itemId);
         Assertions.assertEquals(2, itemResponseDto.getComments().size());
         Assertions.assertEquals("классный phone", itemResponseDto.getComments().get(0).getText());
+        log.info(itemResponseDto.toString());
 
     }
+
 }

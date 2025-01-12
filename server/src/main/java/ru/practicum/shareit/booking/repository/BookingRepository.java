@@ -37,7 +37,8 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByItem_IdInAndStatus(List<Long> itemIds, BookingStatus status, Sort sort);
 
-    Booking findFirstByBookerIdAndItemIdAndEndBefore(Long userId, Long itemId, LocalDateTime now);
+    Booking findFirstByBookerIdAndItemIdAndEndBefore(Long bookerId, Long itemId, LocalDateTime cur);
+
 
     @Query("select booking from Booking booking " +
             "join booking.item item " +
@@ -63,4 +64,5 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "join b.item item " +
             "where item.owner.id = ?1 and b.id = ?2")
     Booking findBookingByOwner(Long bookerId, Long bookingId);
+
 }

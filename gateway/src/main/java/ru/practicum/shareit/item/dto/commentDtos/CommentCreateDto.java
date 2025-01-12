@@ -1,15 +1,25 @@
 package ru.practicum.shareit.item.dto.commentDtos;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 @Builder
-@AllArgsConstructor
+@Jacksonized
 public class CommentCreateDto {
 
-    //    @NotBlank(message = "text должен быть заполнен")
+    @Null
+    private Long id;
+    @NotBlank
     private String text;
+    @Builder.Default
+    private LocalDateTime created = LocalDateTime.now();
 
 }

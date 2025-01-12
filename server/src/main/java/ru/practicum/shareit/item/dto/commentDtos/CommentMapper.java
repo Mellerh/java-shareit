@@ -13,6 +13,7 @@ public class CommentMapper {
                 .text(commentDto.getText())
                 .item(item)
                 .user(user)
+                .created(commentDto.getCreated())
                 .build();
     }
 
