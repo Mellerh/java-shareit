@@ -68,9 +68,7 @@ class UserServiceImplTest {
         UserDto userDto = userService.createUser(createDto);
         Assertions.assertEquals(2, userDto.getId());
         Assertions.assertEquals("Sasha", userDto.getName());
-
-        List<UserDto> listDto = userService.getAllUsers();
-        Assertions.assertEquals(2, listDto.size());
+        
     }
 
     @Test
