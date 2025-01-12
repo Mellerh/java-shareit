@@ -65,7 +65,7 @@ public class BookingServiceImplTest {
     @Test
     @DisplayName("Проверяем получение всех bookings со State = FUTURE." +
             "В таблице bookings хранится booking с брониванием в прошлом.")
-    void getAllUserBookingsWithFUTUREState() {
+    void getAllUserBookingsWithFutureState() {
         long userId = 1L;
         BookingState state = BookingState.FUTURE;
 
