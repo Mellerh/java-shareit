@@ -4,12 +4,6 @@
 <module name="Checker">
 	<property name="severity" value="error"/>
 	<property name="charset" value="UTF-8"/>
-
-
-	Expand All
-
-	@@ -18,8 +19,10 @@
-
 	<property name="fileExtensions" value="java, properties, xml"/>
 	<module name="LineLength">
 		<property name="severity" value="ignore"/>
@@ -32,12 +26,6 @@
 		</module>
 		<!--		<module name="AvoidStarImport"/>-->
 		<module name="OneTopLevelClass"/>
-
-
-		Expand All
-
-		@@ -37,12 +40,14 @@
-
 		<module name="NoLineWrap"/>
 		<module name="EmptyBlock">
 			<property name="option" value="TEXT"/>
@@ -48,6 +36,7 @@
 			<property name="ignoreComments" value="true"/>
 			<property name="message" value="Leading braces"/>
 		</module>
+
 		<module name="LeftCurly"/>
 		<module name="RightCurly">
 			<property name="id" value="RightCurlySame"/>
@@ -62,15 +51,6 @@
 		</module>
 		<module name="WhitespaceAround">
 			<property name="allowEmptyConstructors" value="true"/>
-
-
-			Expand Down
-
-
-			Expand Up
-
-			@@ -158,14 +163,14 @@
-
 			<property name="allowEmptyMethods" value="true"/>
 			<property name="allowEmptyTypes" value="true"/>
 			<property name="allowEmptyLoops" value="true"/>
@@ -194,15 +174,6 @@
 		<module name="UnusedImports"/>
 		<module name="MethodParamPad"/>
 		<module name="NoWhitespaceBefore">
-
-
-			Expand Down
-
-
-			Expand Up
-
-			@@ -199,7 +204,8 @@
-
 			<property name="allowLineBreaks" value="true"/>
 			<property name="tokens" value="COMMA, SEMI, POST_INC, POST_DEC, DOT, ELLIPSIS, METHOD_REF"/>
 		</module>
@@ -238,12 +209,6 @@
 			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
 		</module>
 		<module name="JavadocParagraph">
-
-
-			Expand Down
-
-
-
 			<property name="severity" value="ignore"/>
 			<metadata name="net.sf.eclipsecs.core.lastEnabledSeverity" value="inherit"/>
 		</module>
