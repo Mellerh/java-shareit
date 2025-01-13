@@ -2,7 +2,7 @@
 
 ## Стек
 
-Java Core, Spring Boot, Spring Framework, Git, Maven, SQL (PostgreSQL, H2), Hibernate, JUnit, Docker.
+Java Core, Spring Boot, Spring Framework, Git, Maven, SQL (PostgreSQL, H2), Hibernate, JUnit + MockMvc, Docker. 
 
 ## Для чего предназначен данный проект
 
